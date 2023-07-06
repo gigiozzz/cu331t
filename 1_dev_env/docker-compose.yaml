@@ -2,6 +2,8 @@ version: "3"
 services:
   rp:
     container_name: rp
+    depends_on:
+      - app
     image: gigiozzz/curp:0.1.0
     build: 
       context: ./rp
@@ -11,8 +13,6 @@ services:
     restart: always 
   app:
     container_name: app
-    depends_on:
-      - rp
     image: gigiozzz/cuapp:0.1.0
     build: 
       context: .

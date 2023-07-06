@@ -1,4 +1,4 @@
-FROM node:12.22.12-alpine as build
+FROM node:12.22.12-alpine@sha256:4517380049fc3c9aacceae7764fcf3500354b0ac8a47e4afb35b5bbeb75b9498 as build
 
 RUN apk add --no-cache git
 RUN git clone https://github.com/Rahul-Pandey7/react-image-compressor.git /data/app
