@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm-ver.fullname" . }}-rp
+  labels:
+    {{- include "helm-ver.labels" . | nindent 4 }}
+    app.kubernetes.io/components: rp
+spec:
+  replicas: {{ .Values.rp.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm-ver.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/components: rp
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "helm-ver.selectorLabels" . | nindent 8 }}        
+        app.kubernetes.io/components: rp
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "helm-ver.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-rp
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.rp.image.repository }}:{{ .Values.rp.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.rp.image.pullPolicy }}
+          volumeMounts:
+          - name: nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+          ports:
+            - name: http-rp
+              containerPort: {{ .Values.rp.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http-rp
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http-rp
+          resources:
+            {{- toYaml .Values.rp.resources | nindent 12 }}
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: {{ include "helm-ver.fullname" . }}-rp-conf-cm
+            items:
+              - key: nginx.conf
+                path: nginx.conf
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

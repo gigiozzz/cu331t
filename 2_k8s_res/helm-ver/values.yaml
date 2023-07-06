@@ -1,0 +1,73 @@
+# Default values for helm-ver.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  mount: false
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+app:
+  replicaCount: 1
+  image:
+    repository: gigiozzz/cuapp
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "0.1.0@sha256:1c7205cf4b86a23bac0fa9390161b25fdda137b684c58f916f717c074ae66107"
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 200m
+      memory: 128Mi
+  service:
+    type: ClusterIP
+    port: 3000
+
+rp:
+  replicaCount: 1
+  image:
+    repository: gigiozzz/curp
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "0.1.0@sha256:2ee25a32445c40af3a4598caa07b092f63667c8ead6f78509384c981865b020a"
+  resources:
+    limits:
+      memory: 256Mi
+    requests:
+      cpu: 200m
+      memory: 128Mi
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30009
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "helm-ver.fullname" . }}-app
+  labels:
+    {{- include "helm-ver.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.app.service.type }}
+  ports:
+    - port: {{ .Values.app.service.port }}
+      targetPort: http-app
+      protocol: TCP
+      name: http-app
+  selector:
+    {{- include "helm-ver.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/components: app
