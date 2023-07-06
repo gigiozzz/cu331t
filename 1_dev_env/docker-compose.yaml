@@ -1,0 +1,20 @@
+version: "3"
+services:
+  rp:
+    container_name: rp
+    image: gigiozzz/curp:0.1.0
+    build: 
+      context: ./rp
+      dockerfile: rp.Dockerfile
+    ports:
+      - 80:8080
+    restart: always 
+  app:
+    container_name: app
+    depends_on:
+      - rp
+    image: gigiozzz/cuapp:0.1.0
+    build: 
+      context: .
+      dockerfile: app.Dockerfile
+    restart: always
