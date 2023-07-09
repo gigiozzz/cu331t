@@ -26,15 +26,20 @@ Some comments:
 
 
 ### How to test
-To test it you can directly acces to the `http://<your-node-ip>:30007` of you cluster. But a more confortable way in my opinion (to bypass VPC or some network problem as I experimented with KinD) is to use port-forwad with kubectl: `kubectl -n <your-namespace> port-forward service/curp-service 8080`.
+To test it apply the yaml to your k8s ns and then you can directly acces to the `http://<your-node-ip>:30007` of you cluster. But a more confortable way in my opinion (to bypass VPC or some network problem as I experimented with KinD) is to use port-forwad with kubectl: `kubectl -n <your-namespace> port-forward service/curp-service 8080`.
 
 
 ## 3_dep_prod
 Some comments:
-- ignore all subdir, please evalulate only `final_solution_tf`
 - this project use another GitHub project: https://github.com/gigiozzz/cu331t-codebuild-src
 - you can find some considerations about policies inside the tf code
-- although buildpsec.yaml is an infrastructure element, I have included it in the [repository of the app source code](https://github.com/gigiozzz/cu331t-codebuild-src) for practical reasons (i will change it usually when i will change the app/Docker) and to a trend thati like (think at the .githubflow or to .gitlab-ci.yaml placed inside the repository of the app source code) 
+- although buildpsec.yaml is an infrastructure element, I have included it in the [repository of the app source code](https://github.com/gigiozzz/cu331t-codebuild-src) for practical reasons (i will change it usually when i will change the app/Docker) and to a trend thati like (think at the .githubflow or to .gitlab-ci.yaml placed inside the repository of the app source code)
+- to run it enter the folder e type the commands below:
+```
+terraform init
+terraform plan
+terraform apply
+```
 
 ### Software used
 - aws-cli 2.13.0
